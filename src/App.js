@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+// Part 1a,b
 const Header = (props) => {
     return (
         <h1>{props.course}</h1>
@@ -58,21 +59,34 @@ const Part1 = () => {
     );
 }
 
-const Part2 = () => {
+// Part 1c
+const Display = ({counter}) => {
+    return (
+        <div>{counter}</div>
+    );
+}
+
+const Button = ({text, handleClick}) => {
+    return (
+        <button onClick={handleClick}>
+            {text}
+        </button>
+    );
+}
+
+const Part1c = () => {
     const [counter, setCounter] = useState(0);
 
     const increaseByOne = () => setCounter(counter+1);
+    const decreaseByOne = () => setCounter(counter-1);
     const setToZero = () => setCounter(0);
 
     return (
         <div>
-            <div>{counter}</div>
-            <button onClick={increaseByOne}>
-                plus
-            </button>
-            <button onClick={setToZero}>
-                zero
-            </button>
+            <Display counter={counter} />
+            <Button text='plus' handleClick={increaseByOne} />
+            <Button text='minus' handleClick={decreaseByOne} />
+            <Button text='zero' handleClick={setToZero} />
         </div>
     );
 }
@@ -81,7 +95,7 @@ function App() {
     return (
         <div>
           <Part1 />
-          <Part2 />
+          <Part1c />
         </div>
     );
 }
