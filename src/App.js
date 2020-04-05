@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
@@ -30,7 +30,7 @@ const Total = (props) => {
     );
 }
 
-function App() {
+const Part1 = () => {
     const course = {
         name: 'Half Stack application development',
             parts: [
@@ -51,9 +51,37 @@ function App() {
 
     return (
         <div>
-          <Header course={course.name} />
-          <Content parts={course.parts} />
-          <Total total={course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises} />
+            <Header course={course.name} />
+            <Content parts={course.parts} />
+            <Total total={course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises} />
+        </div>
+    );
+}
+
+const Part2 = () => {
+    const [counter, setCounter] = useState(0);
+
+    const increaseByOne = () => setCounter(counter+1);
+    const setToZero = () => setCounter(0);
+
+    return (
+        <div>
+            <div>{counter}</div>
+            <button onClick={increaseByOne}>
+                plus
+            </button>
+            <button onClick={setToZero}>
+                zero
+            </button>
+        </div>
+    );
+}
+
+function App() {
+    return (
+        <div>
+          <Part1 />
+          <Part2 />
         </div>
     );
 }
