@@ -7,8 +7,9 @@ import Part1d from './components/Part1d';
 import Part1dexer from './components/Part1dexer';
 import Part2 from './components/Part2';
 import Part2bExer from './components/Part2bExer/Part2bExer';
+import Part2cExer from './components/Part2cExer/Part2cExer';
 
-function App() {
+function App({notes}) {
     return (
         <>
         {
@@ -16,8 +17,10 @@ function App() {
             // <Part1c />
             // <Part1d />
             //<Part1dexer />
+            // <Part2 />
+            // <Part2bExer />
         }
-            <Part2bExer />
+            <Part2cExer />
         </>
     );
 }
