@@ -20,9 +20,11 @@ const Part2cExer = () => {
 
     const getWeather = (country) => {
         const url = `http://api.weatherstack.com/current?access_key=${api_key}&query=${country.capital}`;
-        axios.get(url).then(response => {
-            setCapitalWeather(response.data);
-        });
+        axios
+            .get(url)
+            .then(response => {
+                setCapitalWeather(response.data);
+            });
     }
 
     useEffect(countriesHook, []);

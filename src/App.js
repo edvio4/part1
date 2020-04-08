@@ -19,8 +19,9 @@ function App({notes}) {
             //<Part1dexer />
             // <Part2 />
             // <Part2bExer />
+            // <Part2cExer />
         }
-            <Part2cExer />
+            <Part2bExer />
         </>
     );
 }
