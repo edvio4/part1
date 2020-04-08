@@ -21,6 +21,10 @@ const Part2bExer = () => {
 
     useEffect(hook, []);
 
+    const handleFilterChange = (event) => {
+        setFilter(event.target.value);
+    }
+
     const peopleToShow =  filter
         ? persons.filter(person => {
                 const regex = new RegExp(`(${filter})`, 'g');
@@ -31,7 +35,7 @@ const Part2bExer = () => {
     return (
         <div>
             <h2>Phonebook</h2>
-            <Filter filter={filter} setFilter={setFilter} />
+            <Filter filter={filter} handleFilterChange={handleFilterChange} />
             <h2>add new</h2>
             <Form
                 newPerson={newPerson}

@@ -1,63 +1,67 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Filter from '../Filter';
-
+import Button from '../Button';
+import Weather from './Weather';
 
 const Part2cExer = () => {
     const [countries, setCountries] = useState([]);
     const [filter, setFilter] = useState('');
+    const [countryToShow, setCountryToShow] = useState({});
+    const [capitalWeather, setCapitalWeather] = useState({});
+    const api_key = process.env.REACT_APP_WEATHER_STACK_API_KEY;
 
-    const hook = () => {
-        axios
-          .get('https://restcountries.eu/rest/v2/all')
-          .then(response => {
-              setCountries(response.data);
+    const countriesHook = () => {
+        axios.get('https://restcountries.eu/rest/v2/all').then(response => {
+            setCountries(response.data);
         });
     }
 
-    useEffect(hook, []);
+    const getWeather = (country) => {
+        const url = `http://api.weatherstack.com/current?access_key=${api_key}&query=${country.capital}`;
+        axios.get(url).then(response => {
+            setCapitalWeather(response.data);
+        });
+    }
 
-    const countriesToShow =  filter
+    useEffect(countriesHook, []);
+
+    const countriesToShow = filter
         ? countries.filter(country => {
-                const regex = new RegExp(`(${filter})`, 'g');
-                return regex.test(country.name.toLowerCase());
-            })
+            const regex = new RegExp(`(${filter})`, 'g');
+            return regex.test(country.name.toLowerCase());
+        })
         : countries;
 
-    if (countriesToShow.length <=10 && countriesToShow.length > 1) {
-        return (
-            <div>
-                <Filter filter={filter} setFilter={setFilter} />
-                {countriesToShow.map(country =>
-                    <div key={country.name}>
-                    {country.name}
-                    </div>
-                )}
-            </div>
-        );
+    const handleShowClick = (country) => () => {
+        getWeather(country);
+        setCountryToShow(country);
     }
 
-    if (countriesToShow.length === 1) {
-        return (
-            <div>
-                <Filter filter={filter} setFilter={setFilter} />
-                <h1>{countriesToShow[0].name}</h1>
-                <div>capital {countriesToShow[0].capital}</div>
-                <ul>
-                    {countriesToShow[0].languages.map(language =>
-                        <li>{language.name}</li>
-                    )}
-                </ul>
-                <img src={countriesToShow[0].flag} width="200" height="200"></img>
-            </div>
-        );
+    const handleFilterChange = (event) => {
+        setFilter(event.target.value);
     }
 
-    return (
-        <div>
-            <Filter filter={filter} setFilter={setFilter} />
-        </div>
-    );
+    return (<div>
+        <Filter filter={filter} handleFilterChange={handleFilterChange}/> {
+            countriesToShow.length <= 10 && countriesToShow.map(country => <div key={country.name}>
+                {country.name}
+                <Button text="show" handleClick={handleShowClick(country)}/>
+            </div>)
+        }
+        {
+            countryToShow.name && <div>
+                    <h1>{countryToShow.name}</h1>
+                    <div>capital {countryToShow.capital}</div>
+                    <h2>Spoken languages</h2>
+                    <ul>
+                        {countryToShow.languages.map(language => <li key={`${countryToShow.name}-${language}`}>{language.name}</li>)}
+                    </ul>
+                    <img src={countryToShow.flag} width="200" height="200"></img>
+                </div>
+        }
+        {capitalWeather.location && <Weather capital={countryToShow.capital} capitalWeather={capitalWeather}/>}
+    </div>);
 }
 
 export default Part2cExer;
