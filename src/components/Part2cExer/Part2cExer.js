@@ -3,6 +3,7 @@ import axios from 'axios';
 import Filter from '../Filter';
 import Button from '../Button';
 import Weather from './Weather';
+import Country from './Country';
 
 const Part2cExer = () => {
     const [countries, setCountries] = useState([]);
@@ -42,25 +43,21 @@ const Part2cExer = () => {
         setFilter(event.target.value);
     }
 
-    return (<div>
-        <Filter filter={filter} handleFilterChange={handleFilterChange}/> {
-            countriesToShow.length <= 10 && countriesToShow.map(country => <div key={country.name}>
+    return (
+        <div>
+        <Filter filter={filter} handleFilterChange={handleFilterChange}/>
+        {countriesToShow.length <= 10 && countriesToShow.map(country =>
+            <div key={country.name}>
                 {country.name}
                 <Button text="show" handleClick={handleShowClick(country)}/>
-            </div>)
+            </div>
+        )}
+        {countryToShow.name &&
+            <Country country={countryToShow} />
         }
-        {
-            countryToShow.name && <div>
-                    <h1>{countryToShow.name}</h1>
-                    <div>capital {countryToShow.capital}</div>
-                    <h2>Spoken languages</h2>
-                    <ul>
-                        {countryToShow.languages.map(language => <li key={`${countryToShow.name}-${language}`}>{language.name}</li>)}
-                    </ul>
-                    <img src={countryToShow.flag} width="200" height="200"></img>
-                </div>
+        {capitalWeather.location &&
+            <Weather capital={countryToShow.capital} capitalWeather={capitalWeather} />
         }
-        {capitalWeather.location && <Weather capital={countryToShow.capital} capitalWeather={capitalWeather}/>}
     </div>);
 }
 
