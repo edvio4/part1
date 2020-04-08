@@ -1,32 +1,52 @@
 import React from 'react';
+import phonebookService from '../../services/phonebook';
 
 const Form = ({newPerson, setNewPerson, persons, setPersons}) => {
     const addPerson = (event) => {
         event.preventDefault();
-
-        if (persons.some(person => person.name === newPerson.name)) {
-            window.alert(`${newPerson.name} already exists`);
+        const match = persons.find(person => person.name === newPerson.name);
+        if (match) {
+            if (newPerson.number === match.number) {
+                window.alert(`${newPerson.name} already exists`);
+            } else {
+                const result = window.confirm(`${newPerson.name} already exists, replace the phone number?`);
+                const changedPerson = { ...match, number: newPerson.number };
+                if (result) {
+                    phonebookService
+                        .update(match.id, changedPerson)
+                        .then(updatedPerson => {
+                            setPersons(persons.map(per => per.id !== match.id ? per : updatedPerson));
+                            setNewPerson({
+                                name: '',
+                                number: ''
+                            });
+                        });
+                }
+            }
         } else {
-            setPersons(persons.concat(newPerson));
+            phonebookService
+                .create(newPerson)
+                .then(createdPerson => {
+                    setPersons(persons.concat(createdPerson));
+                    setNewPerson({
+                        name: '',
+                        number: ''
+                    });
+                });
         }
-
-        setNewPerson({
-            name: '',
-            phoneNumber: ''
-        });
     }
 
     const handleNameChange = (event) => {
         setNewPerson({
             name: event.target.value,
-            phoneNumber: newPerson.phoneNumber
+            number: newPerson.number
         });
     }
 
     const handlePhoneChange = (event) => {
         setNewPerson({
             name: newPerson.name,
-            phoneNumber: event.target.value
+            number: event.target.value
         });
     }
 
@@ -35,6 +55,7 @@ const Form = ({newPerson, setNewPerson, persons, setPersons}) => {
             <div>
                 name:
                 <input
+                    required
                     value={newPerson.name}
                     onChange={handleNameChange}
                 />
@@ -42,7 +63,8 @@ const Form = ({newPerson, setNewPerson, persons, setPersons}) => {
             <div>
                 phone number:
                 <input
-                    value={newPerson.phoneNumber}
+                    required
+                    value={newPerson.number}
                     onChange={handlePhoneChange}
                 />
             </div>

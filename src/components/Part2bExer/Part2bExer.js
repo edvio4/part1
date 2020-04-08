@@ -1,22 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Filter from '../Filter';
 import Form from './Form';
+import phonebookService from '../../services/phonebook';
 
 const Part2bExer = () => {
     const [persons, setPersons] = useState([]);
     const [newPerson, setNewPerson] = useState({
         name: '',
-        phoneNumber: ''
+        number: ''
     });
     const [filter, setFilter] = useState('');
 
     const hook = () => {
-        axios
-          .get('http://localhost:3001/persons')
-          .then(response => {
-              setPersons(response.data);
-        });
+        phonebookService
+          .getAll()
+          .then(setPersons);
+    }
+
+    const handleDelete = (person) => () => {
+        const result = window.confirm(`Do you want to delete ${person.name}?`);
+        if (result) {
+            phonebookService
+                .deletePerson(person.id)
+                .then(() => {
+                    setPersons(persons.filter(per => per.id !== person.id));
+                });
+        }
     }
 
     useEffect(hook, []);
@@ -25,10 +34,10 @@ const Part2bExer = () => {
         setFilter(event.target.value);
     }
 
-    const peopleToShow =  filter
+    const peopleToShow = filter
         ? persons.filter(person => {
                 const regex = new RegExp(`(${filter})`, 'g');
-                return regex.test(person.name);
+                return regex.test(person.name.toLowerCase());
             })
         : persons;
 
@@ -46,7 +55,7 @@ const Part2bExer = () => {
             <h2>Numbers</h2>
             {peopleToShow.map(person =>
                 <div key={person.id}>
-                    {person.name} {person.phoneNumber}
+                    {person.name} {person.number} <button onClick={handleDelete(person)}>delete</button>
                 </div>
             )}
         </div>
