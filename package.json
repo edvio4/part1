@@ -7,14 +7,12 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
-    "express": "^4.17.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1"
   },
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -36,19 +34,6 @@
     ]
   },
   "devDependencies": {
-    "json-server": "^0.16.1",
-    "nodemon": "^2.0.3"
-  },
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/edvio4/part1.git"
-  },
-  "author": "Edwin",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/edvio4/part1/issues"
-  },
-  "homepage": "https://github.com/edvio4/part1#readme"
+    "json-server": "^0.16.1"
+  }
 }
