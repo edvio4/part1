@@ -42,11 +42,19 @@ const Part2 = () => {
     const toggleNoteImportance = id => () => {
         const note = notes.find(n => n.id === id);
         const changedNote = { ...note, important: !note.important };
-        
+
         noteService
             .update(id, changedNote)
             .then(updatedNote => {
                 setNotes(notes.map(note => note.id !== id ? note : updatedNote));
+            });
+    }
+
+    const deleteNote = id => () => {
+        noteService
+            .deleteNote(id)
+            .then(updatedNote => {
+                setNotes(notes.filter(note => note.id !== id));
             });
     }
 
@@ -64,7 +72,10 @@ const Part2 = () => {
             </div>
             <ul>
                 {notesToShow.map(note =>
-                    <Note key={note.id} note={note} toggleImportance={toggleNoteImportance(note.id)} />
+                    <Note key={note.id} note={note}
+                        toggleImportance={toggleNoteImportance(note.id)}
+                        deleteNote={deleteNote(note.id)}
+                    />
                 )}
             </ul>
             <form onSubmit={addNote}>
